@@ -26,7 +26,7 @@ package-root/
   ],
   "fixed_point_sets": {
     "business": {
-      "exit": ["src/business/exit/open_proxy.py", "src/business/exit/open_proxy.ts"]
+      "exit": ["src/business/exit/py.py", "src/business/exit/ts.ts"]
     }
   },
   "with_wrappers": false,

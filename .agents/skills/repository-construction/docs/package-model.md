@@ -12,7 +12,9 @@
 
 当前固定出入口只有两类：`entry file` 与 `exit file`。`wrappers` 拥有 `entry/` 与 `exit/`；`business` 与 `tests` 只拥有 `exit/`。语义区剩余源码文件统一按自由内部实现处理。
 
-一个包可以同时拥有多个 `implementation variant`。它们按语言等价，而不按主次排列。下游总是依赖自己所需语言对应的 `exit file`。如果并列变体还没有被 `equivalence contract` 和 `conformance suite` 收住，就不要把它们当成稳定包结构。
+固定点目录一旦出现，目录里的固定点文件名也一起固定。每个 `implementation variant` 都按自己的 `suffix` 在固定点目录下生成一个 `<suffix>.<suffix>` 文件。目录承接固定点语义，文件名承接变体归属；不要再让 `connect.go`、`open_proxy.ts` 这类业务化文件名承接固定点语义。
+
+一个包可以同时拥有多个 `implementation variant`。它们按语言等价，而不按主次排列。多变体并列时，固定点目录里会并列出现多个 `<suffix>.<suffix>` 文件；读者通过路径就能同时判断“这是哪个固定点”和“这是哪个变体”。如果并列变体还没有被 `equivalence contract` 和 `conformance suite` 收住，就不要把它们当成稳定包结构。
 
 三个最小例子有助于把这个模型落稳。它们一起说明一件事：`wrappers`、`tests` 和 `optional surfaces` 都按对象需要出现，不是默认全都有。
 
@@ -29,7 +31,7 @@
   "with_tests": false,
   "fixed_point_sets": {
     "business": {
-      "exit": ["src/business/exit/rule.go"]
+      "exit": ["src/business/exit/go.go"]
     }
   },
   "optional_surfaces": []
@@ -51,24 +53,24 @@
   "fixed_point_sets": {
     "wrappers": {
       "entry": [
-        "src/wrappers/entry/connect.go",
-        "src/wrappers/entry/connect.ts"
+        "src/wrappers/entry/go.go",
+        "src/wrappers/entry/ts.ts"
       ],
       "exit": [
-        "src/wrappers/exit/session.go",
-        "src/wrappers/exit/session.ts"
+        "src/wrappers/exit/go.go",
+        "src/wrappers/exit/ts.ts"
       ]
     },
     "business": {
       "exit": [
-        "src/business/exit/open_proxy.go",
-        "src/business/exit/open_proxy.ts"
+        "src/business/exit/go.go",
+        "src/business/exit/ts.ts"
       ]
     },
     "tests": {
       "exit": [
-        "src/tests/exit/proxy_conformance.go",
-        "src/tests/exit/proxy_conformance.ts"
+        "src/tests/exit/go.go",
+        "src/tests/exit/ts.ts"
       ]
     }
   },
@@ -95,11 +97,11 @@
   "with_tests": false,
   "fixed_point_sets": {
     "wrappers": {
-      "entry": ["src/wrappers/entry/load.rs"],
-      "exit": ["src/wrappers/exit/timeline.rs"]
+      "entry": ["src/wrappers/entry/rs.rs"],
+      "exit": ["src/wrappers/exit/rs.rs"]
     },
     "business": {
-      "exit": ["src/business/exit/export_timeline.rs"]
+      "exit": ["src/business/exit/rs.rs"]
     }
   },
   "optional_surfaces": ["docs/", "scripts/", "fixtures/"]
@@ -120,14 +122,26 @@
   "with_tests": true,
   "fixed_point_sets": {
     "wrappers": {
-      "entry": [],
-      "exit": []
+      "entry": [
+        "src/wrappers/entry/go.go",
+        "src/wrappers/entry/ts.ts"
+      ],
+      "exit": [
+        "src/wrappers/exit/go.go",
+        "src/wrappers/exit/ts.ts"
+      ]
     },
     "business": {
-      "exit": []
+      "exit": [
+        "src/business/exit/go.go",
+        "src/business/exit/ts.ts"
+      ]
     },
     "tests": {
-      "exit": []
+      "exit": [
+        "src/tests/exit/go.go",
+        "src/tests/exit/ts.ts"
+      ]
     }
   },
   "translation_boundary": {
@@ -149,16 +163,23 @@ temp/packages/<package-name>/equivalence.md
 这份文件至少写三件事：
 
 1. 哪些 `implementation variant` 被视为等价变体。
-2. 它们共享的出入口职责是什么。
+2. 它们共享的固定点职责是什么。
 3. 需要靠哪组 `conformance suite` 继续核对一致性。
 
-脚手架的最小输入也不接受空默认值。至少显式传入：
+脚手架的最小输入不再接受任意固定点文件名集合。至少显式传入：
 
 1. 一个非空的 `package_language`
 2. 至少一个 `implementation variant`
-3. 至少一个 `business/exit` 文件
-4. 若出现 `wrappers`，再传 `translation_upstream`、`translation_goal`、`wrappers entry` 和 `wrappers exit` 文件集合
-5. 若出现 `tests`，再传 `tests/exit` 文件集合
+3. 若出现 `wrappers`，再传 `translation_upstream` 与 `translation_goal`
+4. 若需要附属面，再显式传对应 flag
+
+固定点文件由脚手架根据 `implementation_variants[*].suffix` 自动生成：
+
+```text
+suffix=go -> go.go
+suffix=ts -> ts.ts
+suffix=rs -> rs.rs
+```
 
 写第一份结构工件时，补三句自然语言说明：
 
@@ -175,22 +196,18 @@ input:
 - package_language=[stock, allocation, reservation]
 - with_wrappers=true
 - with_tests=true
-- wrappers entry=[connect.go, connect.ts]
-- wrappers exit=[session.go, session.ts]
-- business exit=[open_proxy.go, open_proxy.ts]
-- tests exit=[proxy_conformance.go, proxy_conformance.ts]
 ```
 
 ```text
 output files:
-- packages/inventory-sync/src/wrappers/entry/connect.go
-- packages/inventory-sync/src/wrappers/entry/connect.ts
-- packages/inventory-sync/src/wrappers/exit/session.go
-- packages/inventory-sync/src/wrappers/exit/session.ts
-- packages/inventory-sync/src/business/exit/open_proxy.go
-- packages/inventory-sync/src/business/exit/open_proxy.ts
-- packages/inventory-sync/src/tests/exit/proxy_conformance.go
-- packages/inventory-sync/src/tests/exit/proxy_conformance.ts
+- packages/inventory-sync/src/wrappers/entry/go.go
+- packages/inventory-sync/src/wrappers/entry/ts.ts
+- packages/inventory-sync/src/wrappers/exit/go.go
+- packages/inventory-sync/src/wrappers/exit/ts.ts
+- packages/inventory-sync/src/business/exit/go.go
+- packages/inventory-sync/src/business/exit/ts.ts
+- packages/inventory-sync/src/tests/exit/go.go
+- packages/inventory-sync/src/tests/exit/ts.ts
 - temp/packages/inventory-sync/tree.txt
 - temp/packages/inventory-sync/structure.json
 - temp/packages/inventory-sync/equivalence.md
@@ -200,7 +217,7 @@ output files:
 
 包结构站住以后，包内关键文件的最小内容也要立刻补上。下面这些样板不依赖具体语言语法，它们描述的是每个文件最少要承接什么。
 
-`src/wrappers/entry/<file>`
+`src/wrappers/entry/<suffix>.<suffix>`
 
 ```text
 1. 只承接接入边界
@@ -208,7 +225,7 @@ output files:
 3. 让外部世界在这里进入当前包
 ```
 
-`src/wrappers/exit/<file>`
+`src/wrappers/exit/<suffix>.<suffix>`
 
 ```text
 1. 只承接封装区公开边界
@@ -216,7 +233,7 @@ output files:
 3. 不依赖 wrappers 区外源码文件
 ```
 
-`src/business/exit/<file>`
+`src/business/exit/<suffix>.<suffix>`
 
 ```text
 1. 只承接业务区公开边界
@@ -224,7 +241,7 @@ output files:
 3. 不依赖 business 区外源码文件
 ```
 
-`src/tests/exit/<file>`
+`src/tests/exit/<suffix>.<suffix>`
 
 ```text
 1. 只承接测试区公开边界

@@ -144,7 +144,7 @@ package-root/
 └── temp/             # optional
 ```
 
-这里的 `...` 表示自由内部实现位置。它们属于同一个语义区。固定的只有 `entry/` 与 `exit/` 这两类目录；结构里只有这两类固定目录。
+这里的 `...` 表示自由内部实现位置。它们属于同一个语义区。固定的不只是 `entry/` 与 `exit/` 这两类目录，还包括固定点文件命名：每个固定点目录都按 `implementation variant` 的 `suffix` 生成 `<suffix>.<suffix>` 文件。
 
 对应的包结构对象包含下面这些核心字段：
 
@@ -161,18 +161,18 @@ package-root/
   "fixed_point_sets": {
     "wrappers": {
       "entry": [
-        "src/wrappers/entry/connect.go",
-        "src/wrappers/entry/connect.ts"
+        "src/wrappers/entry/go.go",
+        "src/wrappers/entry/ts.ts"
       ],
       "exit": [
-        "src/wrappers/exit/session.go",
-        "src/wrappers/exit/session.ts"
+        "src/wrappers/exit/go.go",
+        "src/wrappers/exit/ts.ts"
       ]
     },
     "business": {
       "exit": [
-        "src/business/exit/open_proxy.go",
-        "src/business/exit/open_proxy.ts"
+        "src/business/exit/go.go",
+        "src/business/exit/ts.ts"
       ]
     }
   },
@@ -185,7 +185,7 @@ package-root/
 }
 ```
 
-这里有三条边界必须写死。第一，`optional_surfaces` 可以是空数组；它只表示“当前显式存在的附属面”。第二，`translation_boundary` 只在 `with_wrappers=true` 时出现。第三，`equivalence_contract_artifact` 只在 `implementation_variants` 多于一个时出现。
+这里有四条边界必须写死。第一，`optional_surfaces` 可以是空数组；它只表示“当前显式存在的附属面”。第二，`translation_boundary` 只在 `with_wrappers=true` 时出现。第三，`equivalence_contract_artifact` 只在 `implementation_variants` 多于一个时出现。第四，`fixed_point_sets` 里的路径必须与 `implementation_variants[*].suffix` 一一对应，固定点文件统一写成 `<suffix>.<suffix>`。
 
 包根结构工件默认写成两份文件：
 
@@ -232,12 +232,10 @@ package-root/
   "scaffold_requirements": {
     "package_language": "non-empty",
     "implementation_variants": "at least one",
-    "business_exit_files": "at least one",
     "translation_upstream": "required when wrappers exist",
     "translation_goal": "required when wrappers exist",
-    "wrappers_entry_files": "required when wrappers exist",
-    "wrappers_exit_files": "required when wrappers exist",
-    "tests_exit_files": "required when tests exist"
+    "fixed_point_file_naming": "derived from implementation_variants as <suffix>.<suffix>",
+    "tests_zone": "generated when tests exist"
   }
 }
 ```

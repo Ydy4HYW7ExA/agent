@@ -47,7 +47,7 @@
 1. 一份 `equivalence contract`
 2. 一份 `conformance suite`
 
-若没有这两项，就不把“并列多语言实现”提升成稳定结构，而只把它视为过渡状态。
+若没有这两项，就不把“并列多变体实现”提升成稳定结构，而只把它视为过渡状态。
 
 ## 拆分信号
 
@@ -97,7 +97,18 @@
 
 ## 文件名
 
-固定的是目录位置，不是文件命名模式。`entry file` 与 `exit file` 的数量和文件名都自由，只要它们落在正确目录，并且关系规则能被核对。
+固定的不只是目录位置，还有固定点文件命名规则。每个固定点目录都按 `implementation variant` 的 `suffix` 生成文件，统一写成 `<suffix>.<suffix>`。例如 `ts.ts`、`go.go`、`rs.rs`。目录承接固定点语义，文件名承接实现变体归属。
+
+当前固定点命名按下面这组位置理解：
+
+| 位置 | 固定点文件 |
+| --- | --- |
+| `src/wrappers/entry/` | `<suffix>.<suffix>` |
+| `src/wrappers/exit/` | `<suffix>.<suffix>` |
+| `src/business/exit/` | `<suffix>.<suffix>` |
+| `src/tests/exit/` | `<suffix>.<suffix>` |
+
+同一个固定点目录里，每个 `suffix` 只允许出现一个对应文件。一个目录里之所以会出现多个固定点文件，只是因为同一个包存在多个实现变体，而不是因为固定点语义再次分裂。
 
 这份文件里的判断都按同一条总规则使用：
 

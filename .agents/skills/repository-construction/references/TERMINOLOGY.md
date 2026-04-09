@@ -12,8 +12,8 @@
 | `compositional upstream dependency` | `formal` | 会把外来语言带入当前包，且当前包公开能力部分由其构成的上游依赖 | 不包括纯工具性依赖 | 决定 `wrappers` 是否出现 |
 | `translation boundary` | `formal` | 把上游语言翻译成包语言的边界对象 | 不负责重定义业务边界 | 通常落在 `wrappers` |
 | `validation surface` | `formal` | 已形成独立验证对象、验证逻辑或可复用验证出口的责任面 | 不等于“包里有测试” | 决定 `tests` 是否出现 |
-| `entry file` | `formal` | 位于固定 `entry/` 目录下、承担接入边界的文件 | 不等于任意入口命名文件 | 局部词 |
-| `exit file` | `formal` | 位于固定 `exit/` 目录下、承担公开边界的文件 | 不等于任意导出文件 | 局部词 |
+| `entry file` | `formal` | 位于固定 `entry/` 目录下、承担接入边界且文件名符合 `<suffix>.<suffix>` 的文件 | 不等于任意入口命名文件 | 局部词 |
+| `exit file` | `formal` | 位于固定 `exit/` 目录下、承担公开边界且文件名符合 `<suffix>.<suffix>` 的文件 | 不等于任意导出文件 | 局部词 |
 | `internal source file` | `formal` | 位于语义区内、但不在固定 `entry/` 或 `exit/` 目录下的源码文件 | 不等于附属面文件 | 局部词 |
 | `implementation variant` | `formal` | 同一个包边界下、以某种语言给出的等价实现变体 | 不等于新包，也不等于任意第二套实现草稿 | 共享词；主定义见 ../../terminology-governance/references/TERMINOLOGY.md |
 | `equivalence contract` | `formal` | 约束同一包下多个 `implementation variant` 公开行为等价的主契约 | 不等于实现细节对齐清单 | 局部词 |

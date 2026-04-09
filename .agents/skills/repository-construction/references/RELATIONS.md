@@ -4,7 +4,7 @@
 
 当前采用三个语义区：`wrappers`、`business`、`tests`。`business` 是必有区，它承接当前包的问题边界和统一语言。`wrappers` 在存在构成性上游依赖时出现。`tests` 在独立验证责任面成立时出现。
 
-当前固定出入口只有两类：`entry file` 与 `exit file`。固定的是目录位置，不是文件数量，也不是文件命名模式。`wrappers` 拥有 `entry/` 与 `exit/`；`business` 与 `tests` 只拥有 `exit/`。其余源码文件都按 `internal source file` 理解。
+当前固定出入口只有两类：`entry file` 与 `exit file`。固定的不只是目录位置，还有文件命名规则：固定点文件统一采用 `<suffix>.<suffix>` 形式。`wrappers` 拥有 `entry/` 与 `exit/`；`business` 与 `tests` 只拥有 `exit/`。其余源码文件都按 `internal source file` 理解。
 
 关系规则按“禁止什么”优先表达。没有被这里禁止的同区内部依赖，不额外制造主次。
 
@@ -39,22 +39,22 @@
 2. `tests` 非出口文件可以依赖 `wrappers/exit` 与 `business/exit`。
 3. 拆分信号只看某个 `business/exit` 对 `business` 非出口文件的一跳直接依赖数，不看传递依赖，也不看它对同区其他出口文件的依赖。
 
-关系规则对多语言包同样成立。`implementation variant` 可以并列存在，但跨语言不直接豁免内部实现规则。下游总是依赖自己所需语言对应的 `exit file`。
+关系规则对多变体包同样成立。`implementation variant` 可以并列存在，但并列不改写固定点规则。读者应当先从目录判断固定点语义，再从 `<suffix>.<suffix>` 判断当前查看的是哪一个实现变体的固定点文件。
 
 把这组规则压成两个最小例子，会更容易落手。
 
 ```text
 legal:
-src/business/internal/pool.py -> src/wrappers/exit/session.py
-src/business/exit/open_proxy.py -> src/business/internal/pool.py
+src/business/internal/pool.ts -> src/wrappers/exit/ts.ts
+src/business/exit/ts.ts -> src/business/internal/pool.ts
 ```
 
 上面这组关系合法，因为 `business` 非出口文件可以依赖 `wrappers/exit`，而 `business/exit` 只继续依赖本区内部实现。
 
 ```text
 illegal:
-src/wrappers/entry/connect.py -> src/wrappers/internal/session.py
-src/wrappers/exit/session.py -> src/business/internal/pool.py
+src/wrappers/entry/ts.ts -> src/wrappers/internal/session.ts
+src/wrappers/exit/ts.ts -> src/business/internal/pool.ts
 ```
 
 上面这组关系不合法，因为 `wrappers/entry` 不碰 `wrappers` 区内源码，而 `wrappers/exit` 也不碰 `wrappers` 区外源码。只要出现这类依赖，关系核对结果就不应再写成“通过”。
