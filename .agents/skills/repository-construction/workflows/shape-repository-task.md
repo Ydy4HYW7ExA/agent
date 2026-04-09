@@ -19,7 +19,7 @@
 
 1. 先判断问题首先落在运行时建模、包判断、包结构、文件关系、仓库根工件、文档落点还是脚本边界。
 2. 若同时覆盖多个面，按 [../references/STRUCTURE.md](../references/STRUCTURE.md) 的主链排序。
-3. 若问题已经涉及 `protocol`、`client kernel`、`server kernel` 或 `instance package`，把它继续挂到 [model-runtime-structure.md](model-runtime-structure.md)。
+3. 若问题已经涉及 `compositional dependency`、`process dependency`、`protocol`、`client kernel`、`server kernel`、`runtime triad`、`instance package` 或 `minimal business domain package group`，把它继续挂到 [model-runtime-structure.md](model-runtime-structure.md)。
 4. 若问题已经涉及仓库根结构或包体系状态，把 `temp/architecture/repository-root/tree.txt`、`structure.json` 与 `active-packages.json` 同时列入本轮工件清单。
 5. 为每项任务挂上后续 workflow。
 6. 把当前仍缺的事实显式列出；若事实尚未稳定，先落进目标仓库 `temp/` 草稿工件。

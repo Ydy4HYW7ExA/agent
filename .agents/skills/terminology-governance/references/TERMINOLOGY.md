@@ -33,3 +33,6 @@
 | `repository root` | 仓库顶层入口与仓库级事实所在的位置 | 不等于所有实现面，也不等于任意顶层目录集合 | `.agents/skills/repository-construction/references/TERMINOLOGY.md` | 它已经成为系统级入口对象 |
 | `package root` | 围绕单一需求边界建立的包级承接对象 | 不只是目录容器，也不等于任意实现子树 | `.agents/skills/repository-construction/references/TERMINOLOGY.md` | 它已经成为系统级入口对象 |
 | `implementation variant` | 同一个包边界下、以某种语言给出的等价实现变体 | 不等于新包，也不等于任意第二套实现草稿 | `.agents/skills/repository-construction/references/TERMINOLOGY.md` | 它已经成为跨对象复用的系统级入口对象 |
+| `runtime triad` | 由 `protocol`、`client kernel` 与 `server kernel` 组成的关系抽象 | 不等于任一实例，也不等于任一实例包 | `.agents/skills/repository-construction/references/TERMINOLOGY.md` | 它已经成为运行时建模的系统级入口对象 |
+| `instance package` | 承接某一侧可运行实例的包对象 | 不等于关系抽象，也不等于任意实现子树 | `.agents/skills/repository-construction/references/TERMINOLOGY.md` | 它已经成为运行时建模的系统级入口对象 |
+| `minimal business domain package group` | 由一份 `runtime triad` 与两侧 `instance package` 共同构成的最小业务域包群 | 不等于单个包，也不等于单条过程边 | `.agents/skills/repository-construction/references/TERMINOLOGY.md` | 它已经成为运行时建模的系统级入口对象 |

@@ -26,6 +26,8 @@
 5. 若旧包进入迁移或退役状态，把状态明确写回 `active-packages.json`。
 6. 消费者迁移完成后，再把旧包从活包集合中移出。
 
+若本轮变化同时涉及运行时关系抽象重组，再先回看 `temp/architecture/runtime-model.json`，确认相关 `runtime triad`、两侧 `instance package` 和 `minimal business domain package group` 已经同步。
+
 `active-packages.json` 的最小对象如下：
 
 ```json

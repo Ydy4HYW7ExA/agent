@@ -12,6 +12,7 @@ agent/
 ├── docs/
 │   ├── README.md
 │   ├── architecture.md
+│   ├── event-system-thinking-notes.md
 │   └── roadmap.md
 ├── .agents/
 │   └── skills/
@@ -44,5 +45,7 @@ agent/
 根 `scripts/` 目录当前只有一个脚本：[clean_repository_cache.py](../scripts/clean_repository_cache.py)。原因很直接：缓存清理属于仓库级卫生；脚手架和方法辅助脚本都下沉到对应的 skill。根目录不承接方法对象自己的脚本边界。入口完整性、导航回链和结构收束通过 [skill-authoring](../.agents/skills/skill-authoring/SKILL.md) 的人工核对 workflow 维护。
 
 阅读顺序保持固定。先读 [AGENTS.md](../AGENTS.md)，再读这个 README。对象已经明确时，直接进入对应 skill 的 `SKILL.md`；需要补“这套体系的对象链和 skill 关系”时，读 [architecture.md](architecture.md)；需要补当前建设状态时，读 [roadmap.md](roadmap.md)。
+
+当前项目自身的系统思考笔记已整理成 [event-system-thinking-notes.md](event-system-thinking-notes.md)。这份文档承接项目级讨论结果，完整保留当前系统方向、关键对象、主要判断、可参考项和未定项，避免后续继续依赖聊天上下文。
 
 当前仓库已经站住主入口、三个基础 skills、skill 自举方法，以及仓库建设里的结构、运行时建模和包体系演化对象。后续扩展只在新的稳定对象真正出现时才进入主结构；根入口不再预设新的厚文目录。

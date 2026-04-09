@@ -8,12 +8,12 @@
 raw material
 -> clean expression
 -> task path
--> formal term
--> documentation-authoring
--> skill-authoring / repository-construction
+-> target skill
 ```
 
-这条链里的前四个节点是已经进入稳定表达的工作对象，后两个节点是明确的方法入口。`raw material` 承接当前任务窗口里的原始材料，不承接长期真值。`clean expression` 把原始材料收成稳定对象、动作和边界，不承接正式执行路径。`task path` 把清洗结果收成可执行入口，执行动作从这里开始脱离聊天原话。`formal term` 负责共享主表述与局部命名边界，不承接任务步骤。进入 [documentation-authoring](../.agents/skills/documentation-authoring/SKILL.md) 以后，信息才真正落成正式文档面；进入 [skill-authoring](../.agents/skills/skill-authoring/SKILL.md) 或 [repository-construction](../.agents/skills/repository-construction/SKILL.md) 以后，工作才继续落到方法工具或仓库结构本身。
+这条链里的前三个节点是工作对象，最后一个节点是当前任务路径首先进入的方法入口。`raw material` 承接当前任务窗口里的原始材料，不承接长期真值。`clean expression` 把原始材料收成稳定对象、动作和边界，不承接正式执行路径。`task path` 把清洗结果收成可执行入口，执行动作从这里开始脱离聊天原话。`target skill` 则按当前问题首先落在哪个对象面来决定；它可能是 [terminology-governance](../.agents/skills/terminology-governance/SKILL.md)、[documentation-authoring](../.agents/skills/documentation-authoring/SKILL.md)、[skill-authoring](../.agents/skills/skill-authoring/SKILL.md) 或 [repository-construction](../.agents/skills/repository-construction/SKILL.md)。
+
+术语治理和文档落点属于常见下一跳，但不是默认必经层。更准确的理解是：任务路径若先出在命名治理，就先进入 `terminology-governance`；若先出在文档对象，就先进入 `documentation-authoring`；若对象已经是 skill 本身或仓库结构本身，就直接进入对应的建设 skill。它们是 `target skill` 的候选入口，不是总链上每次都会经过的固定节点。
 
 五个核心 skills 共同覆盖这条链，但各自只承接一段明确边界：
 

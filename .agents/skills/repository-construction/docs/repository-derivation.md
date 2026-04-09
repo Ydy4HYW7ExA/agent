@@ -4,11 +4,17 @@
 
 问题一旦被收成新的工作范围，这个范围就按新的 `bounded context` 理解。包之所以出现，不是为了给文件找地方放，而是为了让一个问题边界拥有自己的入口、自己的统一语言、自己的内部实现区和自己的公开边界。
 
+这条推导里还要先把两类依赖分开。`compositional dependency` 说的是“当前对象由什么构成”；`process dependency` 说的是“实例在过程里如何相连”。前者继续推出关系抽象和包结构，后者继续推出实例过程和两侧实例包；二者不能混成同一层。
+
 把这条推导压成最小关系块，就是：
 
 ```text
 problem boundary
--> package root
+-> compositional dependency / process dependency
+-> runtime triad
+-> consumer instance package / provider instance package
+-> minimal business domain package group
+-> package roots
 -> package language
 -> fixed entry and exit sets
 -> fixed point file naming
@@ -16,7 +22,7 @@ problem boundary
 -> explicit structure artifacts
 ```
 
-这条关系块说明的不是时间顺序，而是判断依赖。前一个对象没站住，后一个对象就没有可靠落点。包语言没站住，固定出入口的职责就会浮；固定出入口和固定点文件命名没站住，文件关系表就会变成目录想象；结构工件没写出来，后续文档和脚本边界就会重新回到口头判断。
+这条关系块说明的不是时间顺序，而是判断依赖。前一个对象没站住，后一个对象就没有可靠落点。构成性依赖和过程性依赖没分开时，关系抽象和实例对象就会互相污染；三元没站住时，两侧实例包就会被误写成同一个对象；包语言没站住，固定出入口的职责就会浮；固定出入口和固定点文件命名没站住，文件关系表就会变成目录想象；结构工件没写出来，后续文档和脚本边界就会重新回到口头判断。
 
 结构最后必须收成显式工件。否则分析会停留在段落或聊天里，读者仍然不知道仓库根长什么样、包根落在哪、统一语言是什么、哪些文件承担公开边界、以及多变体并列时哪些实现被视为等价。
 
@@ -28,7 +34,10 @@ problem boundary
     "repository_artifacts": [
       "repository root tree",
       "active package set object",
-      "package root tree",
+      "runtime triad object",
+      "two-sided instance package objects",
+      "minimal business domain package group object",
+      "package root trees",
       "package language object",
       "fixed point set object",
       "implementation variant object"

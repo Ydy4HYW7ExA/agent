@@ -28,6 +28,8 @@ raw material
 -> target skill
 ```
 
+这里的 `target skill` 指当前任务路径首先进入的方法入口。`formal term` 与文档落点不是默认必经层；只有当任务路径明确先出在命名治理或文档对象时，它们才作为当前问题的 `target skill` 进入。
+
 如果当前问题先出在表达混乱、对象未明、任务未成形，进入 [collaboration-dialogue](.agents/skills/collaboration-dialogue/SKILL.md)。如果当前问题先出在命名漂移、别名混用、术语未稳，进入 [terminology-governance](.agents/skills/terminology-governance/SKILL.md)。如果当前问题先出在文档怎么写、信息怎么落点、结构化元素怎么使用，进入 [documentation-authoring](.agents/skills/documentation-authoring/SKILL.md)。如果当前任务是在建设或重构 skill 本身，进入 [skill-authoring](.agents/skills/skill-authoring/SKILL.md)。如果当前任务已经进入仓库建设对象本身，进入 [repository-construction](.agents/skills/repository-construction/SKILL.md)。
 
 禁止为了交付速度而牺牲架构。根目录、`docs/`、`.agents/skills/` 和根 `scripts/` 共同构成当前仓库唯一有效的主结构。入口完整性通过 skill 内部 workflow 做人工核对，不由根脚本承担。

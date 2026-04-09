@@ -2,9 +2,24 @@
 
 仓库建设能不能落地，取决于几个关键条件有没有被写实。条件没有被写实，后续结构就会停留在“看上去像对”的状态。
 
-## 构成性上游依赖
+## 构成性依赖与过程性依赖
 
-`compositional upstream dependency` 指两条条件同时成立的上游依赖：
+依赖治理先分层。`compositional dependency` 是关于构成的依赖；`process dependency` 是关于实例的依赖。前者进入结构与边界判断，后者进入运行过程与实例关系判断。不要用 `process dependency` 直接推出包结构、`wrappers` 或翻译边界。
+
+把这条总分界压成最小对象，就是：
+
+```json
+{
+  "dependency_governance": {
+    "compositional_dependency": "about composition",
+    "process_dependency": "about instances",
+    "structure_rule": "only compositional dependency drives package structure",
+    "runtime_rule": "process dependency stays in runtime model"
+  }
+}
+```
+
+当前包结构判断里真正继续下沉的是 `compositional upstream dependency`。它指两条条件同时成立的上游依赖：
 
 1. 当前包对外提供的能力部分由这个上游能力构成。
 2. 上游带来的协议、数据形状、错误语义或接口语言，需要被翻译成当前包统一语言。
@@ -21,6 +36,8 @@
 | message queue client | 消息体进入业务判断时，归为构成性上游依赖 |
 | logger / metrics / tracer | 一般不归为构成性上游依赖 |
 | 时钟 / UUID / env reader | 一般不归为构成性上游依赖 |
+
+`process dependency` 在这里不做“是否长出 `wrappers`”的判断。它只回答：哪个实例在过程里依赖了哪个实例，这条过程边之后由哪一组实例包承接。当前方法默认把它写回 `temp/architecture/runtime-model.json`，不把它直接提升成包结构结论。
 
 ## 独立验证责任面
 

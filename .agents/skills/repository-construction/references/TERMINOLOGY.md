@@ -9,7 +9,9 @@
 | `optional surfaces` | `formal` | 按对象需要增加、但不替代核心结构的附属面 | 不等于结构必有项 | 允许为空 |
 | `active package set` | `formal` | 当前仍承接活需求的一组包对象 | 不等于仓库里所有目录 | 后续演化对象 |
 | `package language` | `formal` | 当前包内部业务判断所使用的统一语言 | 不等于上游依赖语言 | 由 `business` 承接 |
+| `compositional dependency` | `formal` | 关于当前对象由什么构成的依赖 | 不等于实例在过程里的依赖关系 | 结构判断对象 |
 | `compositional upstream dependency` | `formal` | 会把外来语言带入当前包，且当前包公开能力部分由其构成的上游依赖 | 不包括纯工具性依赖 | 决定 `wrappers` 是否出现 |
+| `process dependency` | `formal` | 关于实例如何在运行过程中依赖其他实例的依赖 | 不等于构成当前边界的依赖 | 运行时建模对象 |
 | `translation boundary` | `formal` | 把上游语言翻译成包语言的边界对象 | 不负责重定义业务边界 | 通常落在 `wrappers` |
 | `validation surface` | `formal` | 已形成独立验证对象、验证逻辑或可复用验证出口的责任面 | 不等于“包里有测试” | 决定 `tests` 是否出现 |
 | `entry file` | `formal` | 位于固定 `entry/` 目录下、承担接入边界且文件名符合 `<suffix>.<suffix>` 的文件 | 不等于任意入口命名文件 | 局部词 |
@@ -22,4 +24,8 @@
 | `protocol` | `formal` | 一类稳定交互的契约对象 | 不等于某个具体传输层 | 运行时建模对象 |
 | `client kernel` | `formal` | 消费某个协议的一侧内核 | 不等于实例本身 | 运行时建模对象 |
 | `server kernel` | `formal` | 提供某个协议的一侧内核 | 不等于实例本身 | 运行时建模对象 |
-| `instance package` | `formal` | 装配若干内核并形成可运行实例的包对象 | 不等于任意实现目录 | 运行时建模对象 |
+| `runtime triad` | `formal` | 由 `protocol`、`client kernel` 与 `server kernel` 组成的关系抽象 | 不等于任一实例或实例包 | 共享词；中文常说“三元”；主定义见 ../../terminology-governance/references/TERMINOLOGY.md |
+| `instance package` | `formal` | 装配某一侧内核并形成可运行实例的包对象 | 不等于 `runtime triad`，也不等于任意实现目录 | 共享词；主定义见 ../../terminology-governance/references/TERMINOLOGY.md |
+| `consumer instance package` | `formal` | 承接消费侧实例的 `instance package` | 不等于提供侧实例包 | 运行时建模对象 |
+| `provider instance package` | `formal` | 承接提供侧实例的 `instance package` | 不等于消费侧实例包 | 运行时建模对象 |
+| `minimal business domain package group` | `formal` | 由一份 `runtime triad` 与两侧 `instance package` 共同构成的最小业务域包群 | 不等于单个包，也不等于单条过程边 | 共享词；主定义见 ../../terminology-governance/references/TERMINOLOGY.md |

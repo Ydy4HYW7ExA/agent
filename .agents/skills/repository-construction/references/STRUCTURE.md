@@ -1,15 +1,17 @@
 # Repository Construction Structure
 
-本页涉及的术语以 [TERMINOLOGY.md](TERMINOLOGY.md) 为主落点。下文只保留影响当前结构理解的最小释义：`protocol` 指稳定交互契约；`client kernel` 与 `server kernel` 指契约两侧的内核；`instance package` 指把这些内核装配成可运行实例的包对象；`repository root` 指仓库顶层入口与仓库级事实所在的位置；`package root` 指围绕单一需求边界建立的包级承接对象；`core structure` 指为了站住对象边界、统一语言和公开边界而必须拥有的结构；`optional surfaces` 指按对象需要增加、但不替代核心结构的附属面；`package language` 指当前包内部业务判断所使用的统一语言；`implementation variant` 指同一个包边界下、以某种语言给出的等价实现变体。
+本页涉及的术语以 [TERMINOLOGY.md](TERMINOLOGY.md) 为主落点。下文只保留影响当前结构理解的最小释义：`compositional dependency` 指关于构成的依赖；`process dependency` 指关于实例的依赖；`protocol` 指稳定交互契约；`client kernel` 与 `server kernel` 指契约两侧的内核；`runtime triad` 指由这三者组成的关系抽象；`instance package` 指承接某一侧实例的包对象；`minimal business domain package group` 指三元加两侧实例包；`repository root` 指仓库顶层入口与仓库级事实所在的位置；`package root` 指围绕单一需求边界建立的包级承接对象；`core structure` 指为了站住对象边界、统一语言和公开边界而必须拥有的结构；`optional surfaces` 指按对象需要增加、但不替代核心结构的附属面；`package language` 指当前包内部业务判断所使用的统一语言；`implementation variant` 指同一个包边界下、以某种语言给出的等价实现变体。
 
 仓库建设的主链沿着下面这条关系展开：
 
 ```text
 user task
--> protocol
--> client kernel / server kernel
--> instance package
--> package root
+-> compositional dependency / process dependency
+-> protocol / client kernel / server kernel
+-> runtime triad
+-> consumer instance package / provider instance package
+-> minimal business domain package group
+-> package roots
 -> core structure / optional surfaces
 -> implementation variants
 -> entry file set / exit file set / internal source files
@@ -17,7 +19,7 @@ user task
 -> code / comments / documents / scripts
 ```
 
-这条链的意义在于防止偷步。运行关系还没站住时，先不定包；包还没站住时，先不定语义区；出入口集合还没站住时，先不定依赖规则；结构和关系还没站住时，注释、文档和脚本边界也无从判断。
+这条链的意义在于防止偷步。依赖治理还没分清是关于构成还是关于实例时，先不混着下结构结论；三元还没站住时，先不把它写成实例；两侧实例包还没站住时，先不把它压成单个实例包；包还没站住时，先不定语义区；出入口集合还没站住时，先不定依赖规则；结构和关系还没站住时，注释、文档和脚本边界也无从判断。
 
 结构一旦出现，就写成显式工件。
 
@@ -75,19 +77,20 @@ repository-root/
 | --- | --- |
 | `tree.txt` | 给出仓库根外形 |
 | `structure.json` | 给出仓库根结构判断 |
-| `active-packages.json` | 给出当前活包集合与迁移中的包对象 |
+| `active-packages.json` | 给出当前仓库阶段、活包集合与迁移中的包对象 |
 
 `active-packages.json` 的最小对象如下：
 
 ```json
 {
+  "repository_stage": "forming | expanding | restructuring | stabilizing | shrinking",
   "active_packages": [],
   "migrating_packages": [],
   "retiring_packages": []
 }
 ```
 
-这份文件至少承接当前活包集合和迁移中的包对象。包体系说明可以继续厚化，但工件落点和最小对象必须先站住。
+这份文件至少承接当前仓库阶段、当前活包集合和迁移中的包对象。包体系说明可以继续厚化，但工件落点和最小对象必须先站住。
 
 运行时模型也需要一份显式工件。它默认写成：
 
@@ -101,14 +104,22 @@ repository-root/
 
 ```json
 {
-  "edges": [
+  "relations": [
     {
       "consumer_instance": "",
       "provider_instance": "",
-      "protocol": "",
-      "client_kernel": "",
-      "server_kernel": "",
-      "instance_package": "",
+      "process_dependencies": [],
+      "runtime_triad": {
+        "protocol": "",
+        "client_kernel": "",
+        "server_kernel": ""
+      },
+      "consumer_instance_package": "",
+      "provider_instance_package": "",
+      "minimal_business_domain_package_group": {
+        "runtime_triad": "",
+        "instance_packages": ["", ""]
+      },
       "current_location": "draft | documented_fact | code_object"
     }
   ]

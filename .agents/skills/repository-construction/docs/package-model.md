@@ -10,6 +10,8 @@
 
 当前固定语义区是 `wrappers`、`business`、`tests`。`wrappers` 只在存在构成性上游依赖时出现；`business` 是必有区；`tests` 只在独立验证责任面成立时出现。
 
+这里把依赖治理再压一句。`compositional dependency` 是关于构成的依赖；`process dependency` 是关于实例的依赖。包模型只吸收前者，不直接吸收后者。`process dependency` 继续留在运行时模型里，等它和两侧实例包一起收成最小业务域包群。
+
 当前固定出入口只有两类：`entry file` 与 `exit file`。`wrappers` 拥有 `entry/` 与 `exit/`；`business` 与 `tests` 只拥有 `exit/`。语义区剩余源码文件统一按自由内部实现处理。
 
 固定点目录一旦出现，目录里的固定点文件名也一起固定。每个 `implementation variant` 都按自己的 `suffix` 在固定点目录下生成一个 `<suffix>.<suffix>` 文件。目录承接固定点语义，文件名承接变体归属；不要再让 `connect.go`、`open_proxy.ts` 这类业务化文件名承接固定点语义。
